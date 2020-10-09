@@ -1,15 +1,18 @@
 <%- include('header') -%>    
-    <h1> <%= title %> </h1>
-    <ul>
-        <li>Buy Food</li>
-        <li>Cook Food</li>
-        <li>Eat Food</li>
+    <div class="box" id="heading">
+        <h1> <%= title %> </h1>
+    </div>
+    <div class="box">
         <% for (var i=0; i<items.length; i++) { %>
-        <li><%= items[i] %></li>
+        <div class="item">
+            <input type="checkbox">
+            <p><%= items[i] %></p>
+        </div>
         <% } %>
-    </ul>
-    <form action="/" method="post">
-        <input type="text" name="newItem">
+    </div>
+    
+    <form class="item" action="/" method="post">
+        <input type="text" name="newItem" placeholder="New Item">
         <button type="submit" name = "list" value=<%= title %>>+</button>
     </form>
     
