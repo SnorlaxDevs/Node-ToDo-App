@@ -43,6 +43,13 @@ const item3 = new Item({
 
 const defaultItems = [item1, item2, item3];
 
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+};
+
+const List = mongoose.model("List", listSchema);
+
 app.get("/", (req, res) => {
     // res.send("Hello World!");
     const day = date.getDate();
@@ -65,18 +72,29 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     let item = req.body.newItem;
+    const listName = req.body.list;
     console.log(item);
     const newItemDocument = new Item({
         name: item
     });
-    if (req.body.list == "Work") {
-        // workItems.push(item);
-        res.redirect("/work");
-    } else {
-        // items.push(item);
+    if (listName === date.getDate()) {
         newItemDocument.save();
         res.redirect("/");
+    } else {
+        List.findOne({name: listName}, (err, foundList) => {
+            foundList.items.push(newItemDocument);
+            foundList.save();
+            res.redirect("/" + listName);
+        });
     }
+    // if (req.body.list == "Work") {
+    //     // workItems.push(item);
+    //     res.redirect("/work");
+    // } else {
+    //     // items.push(item);
+    //     newItemDocument.save();
+    //     res.redirect("/");
+    // }
 });
 
 app.post("/delete", (req, res) => {
@@ -92,8 +110,32 @@ app.post("/delete", (req, res) => {
     });
 });
 
-app.get("/work", (req, res) => {
-    res.render("list", {title: "Work List", items: workItems});
+// app.get("/work", (req, res) => {
+//     res.render("list", {title: "Work List", items: workItems});
+// });
+
+app.get("/:customListName", (req, res) => {
+    console.log(req.params.customListName);
+    const customListName = req.params.customListName;
+    
+    List.findOne({name: customListName}, (err, foundList) => {
+        if (err) {
+            console.log(err);
+        } else {
+            if (!foundList) {
+                const list = new List({
+                    name: customListName,
+                    items: defaultItems
+                });
+                console.log("Doesn't Exist!");
+                list.save();
+                res.redirect("/" + customListName);
+            } else {
+                console.log("Exists!");
+                res.render("list", { title: foundList.name, items: foundList.items });
+            }
+        }
+    });        
 });
 
 app.listen(3000, () => {
