@@ -9,11 +9,10 @@
             <p><%= items[i] %></p>
         </div>
         <% } %>
+    
+        <form class="item" action="/" method="post">
+            <input type="text" name="newItem" placeholder="New Item">
+            <button type="submit" name = "list" value=<%= title %>>+</button>
+        </form>
     </div>
-    
-    <form class="item" action="/" method="post">
-        <input type="text" name="newItem" placeholder="New Item">
-        <button type="submit" name = "list" value=<%= title %>>+</button>
-    </form>
-    
 <%- include('footer'); -%>
