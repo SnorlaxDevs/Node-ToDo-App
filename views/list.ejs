@@ -3,12 +3,20 @@
         <h1> <%= title %> </h1>
     </div>
     <div class="box">
-        <% for (var i=0; i<items.length; i++) { %>
-        <div class="item">
-            <input type="checkbox">
-            <p><%= items[i] %></p>
-        </div>
-        <% } %>
+        <% items.forEach((item) => { %>
+        <form action="/delete" method="post">  
+            <div class="item">
+                <input type="checkbox" value="<%= item._id %>" onChange=this.form.submit() name="checkbox">
+                <p><%= item.name  %></p>
+            </div>
+        </form>
+        <% }); %>
+        <!-- <% for (var i=0; i<items.length; i++) { %> -->
+        <!-- <div class="item"> -->
+        <!--     <input type="checkbox"> -->
+        <!--     <p><%= items[i] %></p> -->
+        <!-- </div> -->
+        <!-- <% } %> -->
     
         <form class="item" action="/" method="post">
             <input type="text" name="newItem" placeholder="New Item">
