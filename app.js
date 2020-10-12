@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date");
 const mongoose = require("mongoose");
+const _ = require('lodash')
 
 // const items = [];
 // const workItems = [];
@@ -128,7 +129,7 @@ app.post("/delete", (req, res) => {
 
 app.get("/:customListName", (req, res) => {
     console.log(req.params.customListName);
-    const customListName = req.params.customListName;
+    const customListName = _.capitalize(req.params.customListName);
     
     List.findOne({name: customListName}, (err, foundList) => {
         if (err) {
